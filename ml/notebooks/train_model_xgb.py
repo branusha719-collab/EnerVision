@@ -7,7 +7,7 @@ from sklearn.metrics import r2_score, mean_absolute_error
 from xgboost import XGBRegressor
 
 # Load data
-df = pd.read_csv("datasets/cleaned_dataset.csv")
+df = pd.read_csv("../datasets/cleaned_dataset.csv")
 df["Time"] = pd.to_datetime(df["Time"])
 df = df.sort_values("Time").reset_index(drop=True)
 
