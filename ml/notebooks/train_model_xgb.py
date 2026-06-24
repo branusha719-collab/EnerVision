@@ -1,13 +1,27 @@
 import pandas as pd
 import numpy as np
+import os
+from pathlib import Path
+
+os.environ.setdefault(
+    "MPLCONFIGDIR",
+    str((Path(__file__).resolve().parents[1] / ".matplotlib-cache")),
+)
+
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import joblib
-import os
 from sklearn.metrics import r2_score, mean_absolute_error
 from xgboost import XGBRegressor
 
+ML_DIR = Path(__file__).resolve().parents[1]
+DATASET_PATH = ML_DIR / "datasets" / "cleaned_dataset.csv"
+MODELS_DIR = ML_DIR / "models"
+
 # Load data
-df = pd.read_csv("../datasets/cleaned_dataset.csv")
+df = pd.read_csv(DATASET_PATH)
 df["Time"] = pd.to_datetime(df["Time"])
 df = df.sort_values("Time").reset_index(drop=True)
 
@@ -108,7 +122,8 @@ model = XGBRegressor(
     reg_alpha=0.1,
     reg_lambda=1,
     objective="reg:squarederror",
-    random_state=42
+    random_state=42,
+    n_jobs=1
 )
 
 # Train
@@ -119,12 +134,12 @@ model.fit(
     verbose=False
 )
 # Create models directory if it doesn't exist
-os.makedirs("models", exist_ok=True)
+MODELS_DIR.mkdir(exist_ok=True)
 
 # Save trained model
-joblib.dump(model, "models/solar_model.pkl")
+joblib.dump(model, MODELS_DIR / "solar_model.pkl")
 
-print("✅ Model saved to models/solar_model.pkl")
+print(f"✅ Model saved to {MODELS_DIR / 'solar_model.pkl'}")
 
 # Predict
 predictions = model.predict(X_test)
@@ -150,7 +165,7 @@ plt.scatter(y_test, predictions, alpha=0.3)
 plt.xlabel("Actual Energy")
 plt.ylabel("Predicted Energy")
 plt.title("XGBoost: Actual vs Predicted Energy")
-plt.savefig("models/prediction_plot.png")
+plt.savefig(MODELS_DIR / "prediction_plot.png")
 plt.close()
 
-print("✅ Plot saved to models/prediction_plot.png")
+print(f"✅ Plot saved to {MODELS_DIR / 'prediction_plot.png'}")
