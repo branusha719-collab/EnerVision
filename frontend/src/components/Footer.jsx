@@ -35,7 +35,7 @@ export default function Footer() {
           ))}
         </nav>
         <p className="text-xs text-slate-400 dark:text-slate-600 font-body">
-          © 2025 EnerVision · Karnataka, India
+          © 2026 EnerVision · Karnataka, India
         </p>
       </div>
     </footer>

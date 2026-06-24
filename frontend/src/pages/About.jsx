@@ -519,8 +519,8 @@ export default function About() {
             <div className="flex flex-wrap gap-6 lg:justify-end">
               {[
                 {
-                  value: "94%",
-                  label: "Model accuracy",
+                  value: "90.15%",
+                  label: "R² accuracy achieved",
                   color: "text-sky-500",
                 },
                 {
